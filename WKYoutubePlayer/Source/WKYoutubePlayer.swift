@@ -9,7 +9,7 @@
 import Foundation
 import WebKit
 
-protocol WKYoutubePlayerDelegate: class {
+public protocol WKYoutubePlayerDelegate: class {
     func didBecomeReady(playerView: WKYoutubePlayer)
     func didChangeToState(playerView: WKYoutubePlayer, state: WKYoutubePlayerState)
     func didPlayTime(playerView: WKYoutubePlayer, time: Float)
@@ -117,9 +117,9 @@ private enum WKYoutubePlayerRegexPattern: String {
     case syndication = "^https://tpc.googlesyndication.com/sodar/(.*).html$"
 }
 
-class WKYoutubePlayer: UIView {
+public class WKYoutubePlayer: UIView {
     
-    weak var delegate: WKYoutubePlayerDelegate?
+    public weak var delegate: WKYoutubePlayerDelegate?
     
     private var config: WKWebViewConfiguration = {
         let config = WKWebViewConfiguration()
@@ -682,18 +682,18 @@ class WKYoutubePlayer: UIView {
 
 extension WKYoutubePlayer: WKUIDelegate, WKNavigationDelegate {
     
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         loadingView?.removeFromSuperview()
     }
     
-    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
         }
         return nil
     }
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         let request = navigationAction.request
 
