@@ -14,17 +14,17 @@ public protocol WKYoutubePlayerDelegate: class {
     func didChangeToState(playerView: WKYoutubePlayer, state: WKYoutubePlayerState)
     func didPlayTime(playerView: WKYoutubePlayer, time: Float)
     func receivedError(playerView: WKYoutubePlayer, error: WKYoutubePlayerErrorCode)
-    func initialLoadingView() -> UIView
-    func openToLink(url: URL?)
+    func initialLoadingView() -> UIView?
+    func openToLink(playerView: WKYoutubePlayer, url: URL?)
 }
 
-extension WKYoutubePlayerDelegate {
+public extension WKYoutubePlayerDelegate {
     func didBecomeReady(playerView: WKYoutubePlayer) {}
     func didChangeToState(playerView: WKYoutubePlayer, state: WKYoutubePlayerState) {}
     func didPlayTime(playerView: WKYoutubePlayer, time: Float) {}
     func receivedError(playerView: WKYoutubePlayer, error: WKYoutubePlayerErrorCode) {}
     func initialLoadingView() -> UIView? { return nil }
-    func openToLink(url: URL?) {}
+    func openToLink(playerView: WKYoutubePlayer, url: URL?) {}
 }
 
 public enum WKYoutubePlayerState: String {
@@ -131,7 +131,7 @@ public class WKYoutubePlayer: UIView {
     private var webView: WKWebView!
     private var loadingView: UIView?
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setWebView()
     }
@@ -273,11 +273,11 @@ public class WKYoutubePlayer: UIView {
     public func getVideoLoadedFraction(completed: @escaping (Float) -> Void) {
         webView.evaluateJavaScript("player.getVideoLoadedFraction();") { (response, error) in
             if error != nil {
-                print("getVideoLoadedFraction error: \(error.debugDescription)")
+                //print("getVideoLoadedFraction error: \(error.debugDescription)")
             } else {
                 if let fraction = response as? Float {
                     completed(fraction)
-                    print("getVideoLoadedFraction \(fraction)")
+                    //print("getVideoLoadedFraction \(fraction)")
                     return
                 }
             }
@@ -288,12 +288,12 @@ public class WKYoutubePlayer: UIView {
     public func getPlayerState(completed: @escaping (WKYoutubePlayerState) -> Void) {
         webView.evaluateJavaScript("player.getPlayerState();") { (response, error) in
             if error != nil {
-                print("getPlayerState error: \(error.debugDescription)")
+                //print("getPlayerState error: \(error.debugDescription)")
             } else {
                 if let response = response as? Int {
                     let state = WKYoutubePlayerState(state: String(response))
                     completed(state)
-                    print("getPlayerState \(state)")
+                    //print("getPlayerState \(state)")
                     return
                 }
             }
@@ -304,11 +304,11 @@ public class WKYoutubePlayer: UIView {
     public func getCurrentTime(completed: @escaping (Float) -> Void) {
         webView.evaluateJavaScript("player.getCurrentTime();") { (response, error) in
             if error != nil {
-                print("getCurrentTime error: \(error.debugDescription)")
+                //print("getCurrentTime error: \(error.debugDescription)")
             } else {
                 if let response = response as? Float {
                     completed(response)
-                    print("getCurrentTime \(response)")
+                    //print("getCurrentTime \(response)")
                     return
                 }
             }
@@ -319,12 +319,12 @@ public class WKYoutubePlayer: UIView {
     public func getPlaybackQuality(completed: @escaping (WKYoutubePlayerPlaybackQuality) -> Void) {
         webView.evaluateJavaScript("player.getPlaybackQuality();") { (response, error) in
             if error != nil {
-                print("getPlaybackQuality error: \(error.debugDescription)")
+                //print("getPlaybackQuality error: \(error.debugDescription)")
             } else {
                 if let response = response as? Int {
                     let quality = WKYoutubePlayerPlaybackQuality(quality: String(response))
                     completed(quality)
-                    print("getPlaybackQuality \(quality)")
+                    //print("getPlaybackQuality \(quality)")
                     return
                 }
             }
@@ -335,11 +335,11 @@ public class WKYoutubePlayer: UIView {
     public func getDuration(completed: @escaping (TimeInterval) -> Void) {
         webView.evaluateJavaScript("player.getDuration();") { (response, error) in
             if error != nil {
-                print("getDuration error: \(error.debugDescription)")
+                //print("getDuration error: \(error.debugDescription)")
             } else {
                 if let response = response as? Double {
                     completed(response)
-                    print("getDuration \(response)")
+                    //print("getDuration \(response)")
                     return
                 }
             }
@@ -350,11 +350,11 @@ public class WKYoutubePlayer: UIView {
     public func isMuted(completed: @escaping (Bool) -> Void) {
         webView.evaluateJavaScript("player.isMuted();") { (response, error) in
             if error != nil {
-                print("isMuted error: \(error.debugDescription)")
+                //print("isMuted error: \(error.debugDescription)")
             } else {
                 if let response = response as? Bool {
                     completed(response)
-                    print("isMuted \(response)")
+                    //print("isMuted \(response)")
                     return
                 }
             }
@@ -365,11 +365,11 @@ public class WKYoutubePlayer: UIView {
     public func getVideoUrl(completed: @escaping (URL?) -> Void) {
         webView.evaluateJavaScript("player.getVideoUrl();") { (response, error) in
             if error != nil {
-                print("getVideoUrl error: \(error.debugDescription)")
+                //print("getVideoUrl error: \(error.debugDescription)")
             } else {
                 if let response = response as? String {
                     completed(URL(string: response))
-                    print("getVideoUrl \(response)")
+                    //print("getVideoUrl \(response)")
                     return
                 }
             }
@@ -380,7 +380,7 @@ public class WKYoutubePlayer: UIView {
     public func getAvailableQualityLevels(completed: @escaping ([WKYoutubePlayerPlaybackQuality]) -> Void) {
         webView.evaluateJavaScript("player.getAvailableQualityLevels().toString();") { (response, error) in
             if error != nil {
-                print("getAvailableQualityLevels error: \(error.debugDescription)")
+                //print("getAvailableQualityLevels error: \(error.debugDescription)")
             } else {
                 if let response = response as? String {
                     let rawQualityValues = response.components(separatedBy: ",")
@@ -390,7 +390,7 @@ public class WKYoutubePlayer: UIView {
                         levels.append(quality)
                     }
                     completed(levels)
-                    print("getAvailableQualityLevels \(response)")
+                    //print("getAvailableQualityLevels \(response)")
                     return
                 }
             }
@@ -401,11 +401,11 @@ public class WKYoutubePlayer: UIView {
     public func getVideoEmbedCode(completed: @escaping (String?) -> Void) {
         webView.evaluateJavaScript("player.getVideoEmbedCode();") { (response, error) in
             if error != nil {
-                print("getVideoEmbedCode error: \(error.debugDescription)")
+                //print("getVideoEmbedCode error: \(error.debugDescription)")
             } else {
                 if let response = response as? String {
                     completed(response)
-                    print("getVideoEmbedCode \(response)")
+                    //print("getVideoEmbedCode \(response)")
                     return
                 }
             }
@@ -416,18 +416,18 @@ public class WKYoutubePlayer: UIView {
     public func getPlaylist(completed: @escaping ([String]?) -> Void) {
         webView.evaluateJavaScript("player.getPlaylist();") { (response, error) in
             if error != nil {
-                print("getPlaylist error: \(error.debugDescription)")
+                //print("getPlaylist error: \(error.debugDescription)")
             } else {
                 if let response = response as? [String] {
                     completed(response)
-                    print("getPlaylist \(response)")
+                    //print("getPlaylist \(response)")
                     return
                 }
                 if let response = response as? String {
                     if let data = response.data(using: .utf8) {
                         if let videos = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String] {
                             completed(videos)
-                            print("getPlaylist \(response)")
+                            //print("getPlaylist \(response)")
                             return
                         }
                     }
@@ -440,11 +440,11 @@ public class WKYoutubePlayer: UIView {
     public func getPlaylistIndex(completed: @escaping (Int) -> Void) {
         webView.evaluateJavaScript("player.getPlaylistIndex();") { (response, error) in
             if error != nil {
-                print("getPlaylistIndex error: \(error.debugDescription)")
+                //print("getPlaylistIndex error: \(error.debugDescription)")
             } else {
                 if let response = response as? Int {
                     completed(response)
-                    print("getPlaylistIndex \(response)")
+                    //print("getPlaylistIndex \(response)")
                     return
                 }
             }
@@ -558,7 +558,7 @@ public class WKYoutubePlayer: UIView {
         case WKYoutubePlayerCallback.onReady.rawValue:
             delegate?.didBecomeReady(playerView: self)
             loadingView?.removeFromSuperview()
-            print("didBecomReady")
+            //print("didBecomReady")
         case WKYoutubePlayerCallback.onStateChange.rawValue:
             var state = WKYoutubePlayerState.unknown
             switch data {
@@ -578,7 +578,7 @@ public class WKYoutubePlayer: UIView {
                 break
             }
             delegate?.didChangeToState(playerView: self, state: state)
-            print("didChangeToState \(state)")
+            //print("didChangeToState \(state)")
             
         case WKYoutubePlayerCallback.onError.rawValue:
             var error = WKYoutubePlayerErrorCode.unknown
@@ -596,19 +596,19 @@ public class WKYoutubePlayer: UIView {
                 break
             }
             delegate?.receivedError(playerView: self, error: error)
-            print("receivedError \(error)")
+            //print("receivedError \(error)")
             
         case WKYoutubePlayerCallback.onPlayTime.rawValue:
             if let time = Float(data) {
                 delegate?.didPlayTime(playerView: self, time: time)
-                print("didPlayTime \(time)")
+                //print("didPlayTime \(time)")
             }
             
         case WKYoutubePlayerCallback.onYouTubeIframeAPIFailedToLoad.rawValue:
-            print("onYouTubeIframeAPIFailedToLoad")
+            //print("onYouTubeIframeAPIFailedToLoad")
         
         case WKYoutubePlayerCallback.onYouTubeIframeAPIReady.rawValue:
-            print("onYouTubeIframeAPIReady")
+            //print("onYouTubeIframeAPIReady")
             
         default:
             break
@@ -711,7 +711,7 @@ extension WKYoutubePlayer: WKUIDelegate, WKNavigationDelegate {
                 if delegate == nil {
                     defaultOpenToLink(url: request.url)
                 } else {
-                    delegate?.openToLink(url: request.url)
+                    delegate?.openToLink(playerView: self, url: request.url)
                 }
                 decisionHandler(.cancel)
             }
