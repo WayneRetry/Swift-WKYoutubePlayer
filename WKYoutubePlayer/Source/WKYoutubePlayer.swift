@@ -605,9 +605,11 @@ public class WKYoutubePlayer: UIView {
             }
             
         case WKYoutubePlayerCallback.onYouTubeIframeAPIFailedToLoad.rawValue:
+            break
             //print("onYouTubeIframeAPIFailedToLoad")
         
         case WKYoutubePlayerCallback.onYouTubeIframeAPIReady.rawValue:
+            break
             //print("onYouTubeIframeAPIReady")
             
         default:
