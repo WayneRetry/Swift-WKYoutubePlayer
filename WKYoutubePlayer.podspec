@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "WKYoutubePlayer"
-  s.version      = "1.0.3"
+  s.version      = "1.1.0"
   s.summary      = "High performance YouTube player in WKWebView"
 
   # This description is used to generate tags and improve search results.
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # s.description  = <<-DESC
   #                  DESC
 
-  s.homepage     = "https://github.com/WayneLin1215"
+  s.homepage     = "https://github.com/AntisoWrite"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
 
-  s.swift_version = '4.2'
+  s.swift_version = '5'
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/WayneLin1215/Swift-WKYoutubePlayer.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/AntisoWrite/Swift-WKYoutubePlayer.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

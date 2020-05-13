@@ -83,8 +83,7 @@
         window.location.href = 'ytplayer://onError?data=' + event.data;
     }
     
-    window.onresize = function() {
-        player.setSize(window.innerWidth, window.innerHeight);
+    window.onresize = function() { setTimeout(function() { player.setSize(window.innerWidth, window.innerHeight) }, 100);
     }
     </script>
 </body>

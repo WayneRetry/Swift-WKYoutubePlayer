@@ -124,7 +124,9 @@ public class WKYoutubePlayer: UIView {
     private var config: WKWebViewConfiguration = {
         let config = WKWebViewConfiguration()
         config.allowsInlineMediaPlayback = true
-        config.mediaTypesRequiringUserActionForPlayback = .all
+        if #available(iOS 10.0, *) {
+            config.mediaTypesRequiringUserActionForPlayback = .all
+        }
         return config
     }()
     private var originUrl: URL?
@@ -425,7 +427,7 @@ public class WKYoutubePlayer: UIView {
                 }
                 if let response = response as? String {
                     if let data = response.data(using: .utf8) {
-                        if let videos = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String] {
+                        if let videos = ((try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String]) as [String]??) {
                             completed(videos)
                             //print("getPlaylist \(response)")
                             return
@@ -677,7 +679,11 @@ public class WKYoutubePlayer: UIView {
     
     private func defaultOpenToLink(url: URL?) {
         if let url = url {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
         }
     }
 }
